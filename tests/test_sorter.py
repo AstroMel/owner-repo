@@ -14,6 +14,11 @@ class SorterTests(unittest.TestCase):
         self.assertTrue(r.mentions_vehicle)
         self.assertTrue(r.mentions_volume)
 
+    def test_plural_and_counted_vehicles(self):
+        r = classify(mail("Buying", "We are looking to buy 20 SUVs and 5 used pickups."))
+        self.assertTrue(r.mentions_vehicle)
+        self.assertTrue(r.mentions_volume)
+
     def test_dealer_with_license_claim(self):
         r = classify(mail("Wholesale partner", "We are a licensed wholesale dealer, license VW, buying sedans."))
         self.assertEqual(r.category, Category.DEALER)

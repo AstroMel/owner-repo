@@ -17,12 +17,12 @@ _OPT_OUT = re.compile(
 _LICENSE_CODE = re.compile(r"\b(VW|VI|VA|VF|SD)\b")
 _LICENSE_CONTEXT = re.compile(r"\b(dealer|licen[sc]e[ds]?|licen[sc]e #|dealer #)\b", re.I)
 _VEHICLE = re.compile(
-    r"\b(car|cars|truck|trucks|suv|sedan|vehicle|vehicles|inventory|"
+    r"\b(cars?|trucks?|suvs?|sedans?|vans?|pickups?|vehicles?|inventory|"
     r"toyota|honda|ford|chevy|chevrolet|nissan|bmw|mercedes|hyundai|kia|jeep|vin)\b",
     re.I,
 )
 _VOLUME = re.compile(
-    r"\b(\d{1,4})\s*(units?|cars?|vehicles?|trucks?)\b|\b(a lot|bulk|fleet|volume|per (week|month))\b",
+    r"\b\d{1,4}\s*(?:[a-z]+\s+)?(units?|cars?|vehicles?|trucks?|suvs?|sedans?|vans?|pickups?)\b|\b(a lot|bulk|fleet|volume|per (week|month))\b",
     re.I,
 )
 
