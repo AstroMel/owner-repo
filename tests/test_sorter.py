@@ -14,6 +14,10 @@ class SorterTests(unittest.TestCase):
         self.assertTrue(r.mentions_vehicle)
         self.assertTrue(r.mentions_volume)
 
+    def test_looking_for_resale_is_a_lead(self):
+        r = classify(mail("Sedans", "Looking for 8 sedans per month for resale."))
+        self.assertEqual(r.category, Category.LEAD)
+
     def test_plural_and_counted_vehicles(self):
         r = classify(mail("Buying", "We are looking to buy 20 SUVs and 5 used pickups."))
         self.assertTrue(r.mentions_vehicle)

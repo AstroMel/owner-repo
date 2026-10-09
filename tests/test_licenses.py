@@ -18,6 +18,7 @@ class VerifyTests(unittest.TestCase):
     def test_extracts_numbers_with_varied_formatting(self):
         self.assertEqual(extract_license_numbers("Dealer license # VW 12345"), ["VW 12345"])
         self.assertEqual(extract_license_numbers("lic: vi-22222."), ["vi-22222"])
+        self.assertEqual(extract_license_numbers("Our dealer license is VW12345."), ["VW12345"])
         self.assertEqual(extract_license_numbers("call 407 555 1234"), [])
 
     def test_verified(self):

@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Wheelie Wholesale</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Hanken+Grotesk:wght@400;500;600&display=swap">
+<style>
+:root{
+  --paper:#f6f1e7; --card:#fdfaf3; --ink:#16222e; --muted:#5d6975; --line:#ded5c1;
+  --brass:#a47a2c; --brass-soft:#e9dcbc; --good:#2f6b4f; --warn:#9a6a12; --bad:#8f3a35;
+  --shadow:0 1px 0 rgba(22,34,46,.04),0 14px 30px -18px rgba(22,34,46,.28);
+  --serif:"Cormorant Garamond",Georgia,"Times New Roman",serif;
+  --sans:"Hanken Grotesk",system-ui,-apple-system,"Segoe UI",sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#0f171f; --card:#16212b; --ink:#f0e9d8; --muted:#9aa6b1; --line:#2a3946;
+  --brass:#d1a954; --brass-soft:#3a3120; --good:#6fc29a; --warn:#e0b04d; --bad:#e08a82;
+  --shadow:0 1px 0 rgba(0,0,0,.2),0 16px 32px -18px rgba(0,0,0,.7); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#0f171f; --card:#16212b; --ink:#f0e9d8; --muted:#9aa6b1; --line:#2a3946;
+  --brass:#d1a954; --brass-soft:#3a3120; --good:#6fc29a; --warn:#e0b04d; --bad:#e08a82;
+  --shadow:0 1px 0 rgba(0,0,0,.2),0 16px 32px -18px rgba(0,0,0,.7); color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.55 var(--sans);-webkit-font-smoothing:antialiased}
+.wrap{max-width:72rem;margin:0 auto;padding:0 16px 64px}
+:focus-visible{outline:2px solid var(--brass);outline-offset:3px}
+h1,h2,h3{font-family:var(--serif);font-weight:500;margin:0;line-height:1.08;letter-spacing:.005em}
+.eyebrow{font-size:.74rem;letter-spacing:.24em;text-transform:uppercase;color:var(--brass);font-weight:600}
+
+/* top bar */
+.bar{display:flex;align-items:center;justify-content:space-between;padding:20px 0;gap:12px}
+.mark{font-family:var(--serif);font-size:1.35rem;font-weight:600;letter-spacing:.04em}
+.mark i{color:var(--brass);font-style:normal}
+.iconbtn{background:none;border:1px solid var(--line);color:var(--ink);border-radius:999px;min-height:44px;padding:0 16px;font:inherit;font-size:.9rem;cursor:pointer}
+.iconbtn:hover{border-color:var(--brass)}
+
+/* hero */
+.hero{display:grid;grid-template-columns:1.05fr .95fr;gap:24px;align-items:center;padding:8px 0 32px}
+.hero h1{font-size:clamp(2.6rem,7vw,4.6rem);margin:12px 0 16px}
+.hero h1 em{color:var(--brass)}
+.hero p{margin:0;color:var(--muted);max-width:34rem;font-size:1.06rem}
+.stage{position:relative;aspect-ratio:1/1;max-height:26rem;width:100%;justify-self:center;touch-action:pan-y}
+.stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.stage .fallback{position:absolute;inset:0;display:none;place-items:center;font-family:var(--serif);font-size:1.4rem;color:var(--muted)}
+.stage.nogl .fallback{display:grid}
+.rule{height:1px;background:linear-gradient(90deg,transparent,var(--brass),transparent);opacity:.55;border:0;margin:0}
+
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(9.5rem,1fr));gap:12px;margin:28px 0}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;box-shadow:var(--shadow)}
+.stat b{display:block;font-family:var(--serif);font-size:2.4rem;font-weight:500;line-height:1}
+.stat span{font-size:.8rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+
+/* workspace */
+.work{display:grid;grid-template-columns:minmax(0,22rem) minmax(0,1fr);gap:20px;align-items:start}
+.panel-h{display:flex;align-items:baseline;justify-content:space-between;margin:0 0 12px}
+.panel-h h2{font-size:1.7rem}
+.tabs{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap}
+.tab{border:1px solid var(--line);background:none;color:var(--muted);border-radius:999px;padding:0 14px;min-height:44px;font:inherit;font-size:.88rem;cursor:pointer}
+.tab[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;perspective:900px}
+.item{display:block;width:100%;text-align:left;font:inherit;color:inherit;cursor:pointer;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;box-shadow:var(--shadow);
+  transition:transform .25s ease,border-color .2s;transform-style:preserve-3d;will-change:transform}
+.item:hover{border-color:var(--brass)}
+.item[aria-current="true"]{border-color:var(--brass);box-shadow:0 0 0 1px var(--brass),var(--shadow)}
+.item .top{display:flex;justify-content:space-between;gap:8px;align-items:center}
+.item .who{font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.item .subj{color:var(--muted);font-size:.9rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pill{font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;font-weight:600;padding:3px 10px;border-radius:999px;border:1px solid currentColor;white-space:nowrap}
+.hot{color:var(--good)} .warm{color:var(--warn)} .cold,.drop{color:var(--muted)} .bad{color:var(--bad)}
+.item .done{font-size:.78rem;color:var(--muted);margin-top:6px}
+
+.detail{background:var(--card);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:clamp(18px,3vw,30px);display:flex;flex-direction:column;gap:22px;min-width:0}
+.dhead{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:flex-start}
+.dhead h2{font-size:clamp(1.7rem,4vw,2.3rem)}
+.meta{color:var(--muted);font-size:.92rem;overflow-wrap:anywhere}
+.score{display:flex;align-items:center;gap:14px}
+.dial{--p:0;width:72px;height:72px;border-radius:50%;display:grid;place-items:center;
+  background:conic-gradient(var(--brass) calc(var(--p)*1%),var(--line) 0)}
+.dial span{width:58px;height:58px;border-radius:50%;background:var(--card);display:grid;place-items:center;font-family:var(--serif);font-size:1.5rem}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(15rem,1fr));gap:14px}
+.box{border:1px solid var(--line);border-radius:12px;padding:14px 16px;min-width:0}
+.box h3{font-size:1.15rem;margin-bottom:8px}
+.box ul{margin:0;padding-left:1.1rem;color:var(--muted);font-size:.92rem;display:flex;flex-direction:column;gap:4px}
+.quote{border-left:2px solid var(--brass);padding-left:14px;color:var(--muted);font-style:italic;font-family:var(--serif);font-size:1.15rem;line-height:1.4}
+label.lab{display:block;font-size:.74rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;font-weight:600}
+input.f,textarea.f{width:100%;font:inherit;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+textarea.f{min-height:29rem;resize:vertical;line-height:1.55}
+.actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.btn{font:inherit;font-weight:600;border-radius:999px;min-height:48px;padding:0 26px;cursor:pointer;border:1px solid var(--ink);background:none;color:var(--ink)}
+.btn.primary{background:var(--ink);color:var(--paper)}
+.btn.primary:hover{background:var(--brass);border-color:var(--brass);color:#fff}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.note{font-size:.84rem;color:var(--muted)}
+.banner{border:1px dashed var(--brass);background:var(--brass-soft);border-radius:12px;padding:12px 16px;font-size:.92rem}
+.empty{color:var(--muted);padding:40px 12px;text-align:center;font-family:var(--serif);font-size:1.3rem}
+footer{margin-top:44px;color:var(--muted);font-size:.84rem;text-align:center}
+
+@media (max-width:860px){
+  .hero{grid-template-columns:1fr}
+  .stage{max-height:17rem;order:-1}
+  .work{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){.item{transition:none}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="bar">
+    <div class="mark">Wheelie <i>&middot;</i> Wholesale</div>
+    <button class="iconbtn" id="theme" type="button" aria-label="Switch between light and dark">Light / Dark</button>
+  </header>
+
+  <section class="hero">
+    <div>
+      <span class="eyebrow">Orlando, Florida &middot; Approval desk</span>
+      <h1>Every reply, <em>your word</em> first.</h1>
+      <p>Wheelie reads the mail, checks each dealer's license and prepares a considered reply. Nothing leaves this desk until you approve it.</p>
+    </div>
+    <div class="stage" id="stage" role="img" aria-label="A slowly turning brass wheel">
+      <div class="fallback">Wheelie</div>
+    </div>
+  </section>
+  <hr class="rule">
+
+  <section class="stats" id="stats" aria-label="Summary"></section>
+
+  <main class="work">
+    <section aria-labelledby="qh">
+      <div class="panel-h"><h2 id="qh">Inbox</h2><span class="note" id="count"></span></div>
+      <div class="tabs" role="group" aria-label="Filter">
+        <button class="tab" type="button" data-f="open" aria-pressed="true">To review</button>
+        <button class="tab" type="button" data-f="done" aria-pressed="false">Decided</button>
+        <button class="tab" type="button" data-f="filtered" aria-pressed="false">Filtered out</button>
+      </div>
+      <ul class="list" id="list"></ul>
+    </section>
+    <section class="detail" id="detail" aria-live="polite"></section>
+  </main>
+
+  <footer>This desk records your decisions in this browser only. Sending is a separate, later step.</footer>
+</div>
+
+<script src="vendor/three.min.js"></script>
+<script src="queue.js"></script>
+<script>
+(function(){
+  "use strict";
+  var Q = window.WHEELIE_QUEUE || [];
+  var store = {
+    get:function(k,d){try{var v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},
+    set:function(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+  };
+  var decisions = store.get("wheelie.decisions",{});   // id -> "approved" | "rejected"
+  var edits = store.get("wheelie.edits",{});           // id -> {subject, body}
+  var filter = "open", selected = null;
+
+  function $(id){return document.getElementById(id)}
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+  function name(sender){var m=sender.split("<")[0].trim();return m&&m.indexOf("@")<0?m:sender.replace(/[<>]/g,"")}
+  function hasDraft(q){return !!q.draft}
+  function inGroup(q,f){
+    if(f==="filtered") return !hasDraft(q);
+    if(f==="done") return hasDraft(q) && !!decisions[q.id];
+    return hasDraft(q) && !decisions[q.id];
+  }
+
+  function renderStats(){
+    var open=Q.filter(function(q){return inGroup(q,"open")}).length;
+    var done=Q.filter(function(q){return inGroup(q,"done")}).length;
+    var hot=Q.filter(function(q){return q.tier==="hot"&&hasDraft(q)}).length;
+    var out=Q.filter(function(q){return inGroup(q,"filtered")}).length;
+    $("stats").innerHTML=[["Awaiting you",open],["Hot leads",hot],["Decided",done],["Filtered out",out]]
+      .map(function(s){return '<div class="stat"><b>'+s[1]+'</b><span>'+s[0]+'</span></div>'}).join("");
+  }
+
+  function renderList(){
+    var rows=Q.filter(function(q){return inGroup(q,filter)});
+    $("count").textContent=rows.length+(rows.length===1?" message":" messages");
+    if(!rows.length){$("list").innerHTML='<li class="empty">Nothing here.</li>';return}
+    if(!rows.some(function(q){return q.id===selected})) selected=rows[0].id;
+    $("list").innerHTML=rows.map(function(q){
+      var d=decisions[q.id];
+      return '<li><button class="item" type="button" data-id="'+q.id+'"'+(q.id===selected?' aria-current="true"':'')+'>'
+        +'<div class="top"><span class="who">'+esc(name(q.sender))+'</span><span class="pill '+q.tier+'">'+q.tier+'</span></div>'
+        +'<div class="subj">'+esc(q.subject)+'</div>'
+        +(d?'<div class="done">'+(d==="approved"?"Approved":"Declined")+'</div>':'')
+        +'</button></li>';
+    }).join("");
+  }
+
+  function renderDetail(){
+    var q=Q.filter(function(x){return x.id===selected})[0], el=$("detail");
+    if(!q){el.innerHTML='<div class="empty">Select a message to read it.</div>';return}
+    var lic=q.license, d=q.draft, decided=decisions[q.id];
+    var licLine = lic.business ? esc(lic.business)+" &middot; "+esc(lic.type)+" "+esc(lic.number) : "No license on file";
+    var h='<div class="dhead"><div><span class="eyebrow">'+esc(q.category)+'</span><h2>'+esc(q.subject)+'</h2>'
+      +'<div class="meta">From '+esc(q.sender)+'</div></div>'
+      +'<div class="score"><div class="dial" style="--p:'+q.score+'"><span>'+q.score+'</span></div>'
+      +'<div><span class="pill '+q.tier+'">'+q.tier+'</span></div></div></div>';
+    h+='<p class="quote">&ldquo;'+esc(q.excerpt)+'&rdquo;</p>';
+    h+='<div class="cols"><div class="box"><h3>License</h3><div class="meta">'+licLine+'</div><ul>'
+      +lic.notes.map(function(n){return '<li>'+esc(n)+'</li>'}).join("")+'</ul></div>'
+      +'<div class="box"><h3>Why this score</h3><ul>'
+      +q.reasons.map(function(n){return '<li>'+esc(n)+'</li>'}).join("")+'</ul></div></div>';
+    if(!d){
+      h+='<div class="banner">No reply is drafted for this message'+(q.optOut?' &mdash; the sender asked to stop, so they have been added to the suppression list':'')+'.</div>';
+    } else {
+      var e=edits[q.id]||{subject:d.subject,body:d.body};
+      if(d.needsReview) h+='<div class="banner">Worth a careful look: the license is not fully confirmed, so this draft asks for it.</div>';
+      h+='<div><label class="lab" for="to">To</label><input class="f" id="to" value="'+esc(d.to)+'" readonly></div>'
+        +'<div><label class="lab" for="sub">Subject</label><input class="f" id="sub" value="'+esc(e.subject)+'"'+(decided?' readonly':'')+'></div>'
+        +'<div><label class="lab" for="body">Message</label><textarea class="f" id="body"'+(decided?' readonly':'')+'>'+esc(e.body)+'</textarea></div>';
+      if(decided){
+        h+='<div class="banner">You '+(decided==="approved"?"approved":"declined")+' this draft. <button class="btn" id="undo" type="button" style="min-height:44px;margin-left:8px">Reopen</button></div>';
+      } else {
+        h+='<div class="actions"><button class="btn primary" id="ok" type="button">Approve reply</button>'
+          +'<button class="btn" id="no" type="button">Decline</button>'
+          +'<span class="note">The closing &ldquo;STOP&rdquo; line must stay in the message.</span></div>';
+      }
+    }
+    el.innerHTML=h;
+    if(d&&!decided){
+      var sub=$("sub"), body=$("body");
+      function save(){edits[q.id]={subject:sub.value,body:body.value};store.set("wheelie.edits",edits)}
+      sub.addEventListener("input",save); body.addEventListener("input",save);
+      $("ok").addEventListener("click",function(){
+        if(body.value.indexOf("STOP")<0){alert('Please keep the opt-out line (it contains "STOP") before approving.');return}
+        save(); decisions[q.id]="approved"; store.set("wheelie.decisions",decisions); renderAll();
+      });
+      $("no").addEventListener("click",function(){decisions[q.id]="rejected";store.set("wheelie.decisions",decisions);renderAll()});
+    }
+    if(d&&decided) $("undo").addEventListener("click",function(){delete decisions[q.id];store.set("wheelie.decisions",decisions);renderAll()});
+  }
+
+  function renderAll(){renderStats();renderList();renderDetail()}
+
+  $("list").addEventListener("click",function(ev){
+    var b=ev.target.closest(".item"); if(!b) return;
+    selected=Number(b.getAttribute("data-id")); renderList(); renderDetail();
+    if(window.matchMedia("(max-width:860px)").matches) $("detail").scrollIntoView({behavior:"smooth",block:"start"});
+  });
+  // gentle 3D tilt on list cards
+  $("list").addEventListener("pointermove",function(ev){
+    var b=ev.target.closest(".item"); if(!b||ev.pointerType==="touch"||window.matchMedia("(prefers-reduced-motion:reduce)").matches) return;
+    var r=b.getBoundingClientRect(), x=(ev.clientX-r.left)/r.width-.5, y=(ev.clientY-r.top)/r.height-.5;
+    b.style.transform="rotateY("+(x*7)+"deg) rotateX("+(-y*7)+"deg) translateZ(4px)";
+  });
+  $("list").addEventListener("pointerout",function(ev){var b=ev.target.closest(".item");if(b)b.style.transform=""});
+  Array.prototype.forEach.call(document.querySelectorAll(".tab"),function(t){
+    t.addEventListener("click",function(){
+      filter=t.getAttribute("data-f");
+      Array.prototype.forEach.call(document.querySelectorAll(".tab"),function(o){o.setAttribute("aria-pressed",String(o===t))});
+      renderList();renderDetail();
+    });
+  });
+  $("theme").addEventListener("click",function(){
+    var root=document.documentElement, dark=getComputedStyle(root).colorScheme==="dark";
+    root.setAttribute("data-theme",dark?"light":"dark"); store.set("wheelie.theme",dark?"light":"dark"); recolor();
+  });
+  var saved=store.get("wheelie.theme",null); if(saved) document.documentElement.setAttribute("data-theme",saved);
+
+  /* ---- 3D: a brass wheel, polished and unhurried ---- */
+  var stage=$("stage"), renderer, scene, camera, wheel, brassMat, steelMat, ready=false, px=0, py=0;
+  function recolor(){
+    if(!ready) return;
+    var dark=getComputedStyle(document.documentElement).colorScheme==="dark";
+    brassMat.color.set(dark?0xd1a954:0xb08630);
+  }
+  function initGL(){
+    try{
+      var c=document.createElement("canvas");
+      if(!window.THREE||!(c.getContext("webgl")||c.getContext("experimental-webgl"))) throw 0;
+      renderer=new THREE.WebGLRenderer({antialias:true,alpha:true});
+      renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));
+      stage.insertBefore(renderer.domElement,stage.firstChild);
+      scene=new THREE.Scene();
+      camera=new THREE.PerspectiveCamera(32,1,.1,50); camera.position.set(0,.3,10.2);
+      scene.add(new THREE.HemisphereLight(0xfff4dc,0x445566,.9));
+      var key=new THREE.DirectionalLight(0xffffff,1.1); key.position.set(3,4,5); scene.add(key);
+      var rim=new THREE.DirectionalLight(0xffd9a0,.6); rim.position.set(-4,-1,-3); scene.add(rim);
+
+      brassMat=new THREE.MeshStandardMaterial({color:0xb08630,metalness:.85,roughness:.3});
+      steelMat=new THREE.MeshStandardMaterial({color:0x1d2a36,metalness:.2,roughness:.7});
+      wheel=new THREE.Group();
+      var tyre=new THREE.Mesh(new THREE.TorusGeometry(1.9,.5,28,96),steelMat); wheel.add(tyre);
+      var rimM=new THREE.Mesh(new THREE.TorusGeometry(1.5,.12,20,80),brassMat); wheel.add(rimM);
+      for(var i=0;i<10;i++){
+        var spoke=new THREE.Mesh(new THREE.CylinderGeometry(.07,.07,1.35,12),brassMat);
+        var a=i/10*Math.PI*2; spoke.position.set(Math.cos(a)*.78,Math.sin(a)*.78,0); spoke.rotation.z=a-Math.PI/2;
+        wheel.add(spoke);
+      }
+      var hub=new THREE.Mesh(new THREE.CylinderGeometry(.32,.32,.5,40),brassMat); hub.rotation.x=Math.PI/2; wheel.add(hub);
+      var cap=new THREE.Mesh(new THREE.SphereGeometry(.2,24,16),steelMat); cap.position.z=.28; wheel.add(cap);
+      wheel.rotation.set(.25,-.7,0);
+      scene.add(wheel);
+      ready=true; recolor(); resize();
+      window.addEventListener("resize",resize);
+      stage.addEventListener("pointermove",function(e){
+        var r=stage.getBoundingClientRect(); px=((e.clientX-r.left)/r.width-.5); py=((e.clientY-r.top)/r.height-.5);
+      });
+      loop();
+    }catch(err){stage.classList.add("nogl")}
+  }
+  function resize(){
+    if(!ready) return;
+    var w=stage.clientWidth,h=stage.clientHeight; renderer.setSize(w,h,false); camera.aspect=w/h; camera.updateProjectionMatrix();
+  }
+  var reduce=window.matchMedia&&matchMedia("(prefers-reduced-motion:reduce)").matches, t0=performance.now();
+  function loop(){
+    var t=(performance.now()-t0)/1000;
+    if(!reduce) wheel.rotation.z-=.004;
+    wheel.rotation.y+=((-.7+px*.7)-wheel.rotation.y)*.05;
+    wheel.rotation.x+=((.25+py*.5)-wheel.rotation.x)*.05;
+    wheel.position.y=reduce?0:Math.sin(t*1.1)*.05;
+    renderer.render(scene,camera);
+    requestAnimationFrame(loop);
+  }
+
+  renderAll();
+  initGL();
+})();
+</script>
+</body>
+</html>

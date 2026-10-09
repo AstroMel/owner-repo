@@ -52,6 +52,7 @@ _RULES: dict[Category, list[tuple[re.Pattern[str], float]]] = {
         (re.compile(r"\b(looking (to|for)|want to|interested in|need)\b.*\b(buy|sell|purchase|source)\b", re.I | re.S), 2.0),
         (re.compile(r"\b(do you have|available|price on|how much|can you get)\b", re.I), 1.0),
         (re.compile(r"\b(wholesale|trade[- ]in|buying|selling)\b", re.I), 1.0),
+        (re.compile(r"\b(looking for|resale|restock|sourcing)\b", re.I), 1.0),
     ],
 }
 

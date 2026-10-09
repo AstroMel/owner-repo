@@ -10,4 +10,8 @@ Stage 3: `SuppressionList(path)` is a SQLite-backed, append-only opt-out list (e
 
 Stage 4: `score(email, classification, verification, suppression)` returns a 0-100 score, a tier (hot/warm/cold/drop), an action (draft/review/ignore) and the reasons behind each point. Opt-outs, suppressed senders and non-lead categories drop to zero first. A verified active license is worth the most, then a named vehicle, volume, and a registered address that doesn't look like a PO box or apartment. Bad license evidence caps the score (inactive 20, not found 25, wrong type 30, auction dealer 45). Only a hot score with a verified license gets `draft`, and a draft still waits for your approval. The office-address check is a heuristic on the registry address, not a real inspection.
 
+Stage 5: `draft_reply(...)` writes a reply for hot and warm leads only (nothing for filtered, opted-out or suppressed senders). Drafts start as `pending_approval`; `approve()` re-checks the suppression list and requires the "STOP" opt-out line, so a draft can never be approved for someone who opted out in the meantime. Each draft carries the business name and postal address. Nothing here sends mail.
+
+Approval desk UI: `python3 -m wheelie.demo` rebuilds the sample queue (made-up emails), then open `ui/index.html` in a browser (no server needed; three.js is vendored in `ui/vendor`). It shows the inbox, license and score reasoning, and an editable draft with Approve / Decline. Decisions are saved in the browser only; the UI sends nothing. Light and dark themes, keyboard accessible, works at phone width.
+
 Run tests: `python3 -m unittest discover -s tests -t .`

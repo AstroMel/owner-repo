@@ -21,7 +21,7 @@ from .models import Email
 ELIGIBLE_TYPES = frozenset({"VW", "VI", "VA"})  # direct fit, strong fit, auction channel
 _FREE_MAIL = frozenset({"gmail.com", "yahoo.com", "outlook.com", "hotmail.com", "aol.com", "icloud.com"})
 _NUMBER_CLAIM = re.compile(
-    r"\b(?:dealer\s+)?(?:licen[sc]e|lic)\s*(?:#|no\.?|number)?\s*[:#]?\s*([A-Za-z]{0,2}[ -]?\d{4,8})\b",
+    r"\b(?:dealer\s+)?(?:licen[sc]e|lic)\s*(?:#|no\.?|number)?\s*(?:is\b|was\b|[:#])?\s*[:#]?\s*([A-Za-z]{0,2}[ -]?\d{4,8})\b",
     re.I,
 )
 
